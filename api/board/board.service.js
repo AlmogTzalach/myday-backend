@@ -40,8 +40,8 @@ async function remove(boardId) {
 async function add(board) {
 	try {
 		const collection = await dbService.getCollection('board')
-		const addedboard = await collection.insertOne(board)
-		return addedboard
+		const addedBoard = await collection.insertOne(board)
+		return addedBoard
 	} catch (err) {
 		logger.error('cannot insert board', err)
 		throw err

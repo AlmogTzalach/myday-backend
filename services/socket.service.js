@@ -13,6 +13,8 @@ function setupSocketAPI(http) {
 		socket.on('disconnect', (socket) => {
 			logger.info(`Socket disconnected [id: ${socket.id}]`)
 		})
+
+		//CHAT
 		socket.on('chat-set-topic', (topic) => {
 			if (socket.myTopic === topic) return
 			if (socket.myTopic) {
@@ -49,14 +51,23 @@ function setupSocketAPI(http) {
 			logger.info(`Removing socket.userId for socket [id: ${socket.id}]`)
 			delete socket.userId
 		})
-		// socket.on('taskAdded', (taskToAdd) => {
-		// 	// console.log(sockr);
-		// 	broadcast({ type: 'taskAdd', data: taskToAdd })
-		// })
+
+		//BOARD ACTIONS
+		socket.on('board-topic', (topic) => {
+			if (socket.myTopic === topic) return
+			if (socket.myTopic) {
+				socket.leave(socket.myTopic)
+				logger.info(
+					`Socket is leaving topic ${socket.myTopic} [id: ${socket.id}]`
+				)
+			}
+			socket.join(topic)
+			socket.myTopic = topic
+		})
 		socket.on('updateBoard', (board) => {
-			// console.log(socket.id)
+			// console.log(socket.myTopic, 'topic')
+			// gIo.to(socket.myTopic).emit('boardUpdate', board)
 			gIo.emit('boardUpdate', board)
-			// broadcast({ type: 'boardUpdate', data: board })
 		})
 	})
 }
