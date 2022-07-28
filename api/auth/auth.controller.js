@@ -8,7 +8,10 @@ async function login(req, res) {
 		const user = await authService.login(username, password)
 		const loginToken = authService.getLoginToken(user)
 		logger.info('User login: ', user)
-		res.cookie('loginToken', loginToken)
+		// res.cookie('loginToken', loginToken, {
+		// 	sameSite: false,
+		// 	secure: true,
+		// })
 
 		res.json(user)
 	} catch (err) {
@@ -27,7 +30,10 @@ async function signup(req, res) {
 		const user = await authService.login(username, password)
 		const loginToken = authService.getLoginToken(user)
 		logger.info('User login: ', user)
-		res.cookie('loginToken', loginToken)
+		// res.cookie('loginToken', loginToken, {
+		// 	sameSite: false,
+		// 	secure: false,
+		// })
 
 		res.json(user)
 	} catch (err) {
@@ -38,7 +44,7 @@ async function signup(req, res) {
 
 async function logout(req, res) {
 	try {
-		res.clearCookie('loginToken')
+		// res.clearCookie('loginToken')
 		res.send({ msg: 'Logged out successfully' })
 	} catch (err) {
 		res.status(500).send({ err: 'Failed to logout' })
